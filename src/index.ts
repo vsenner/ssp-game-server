@@ -1,8 +1,7 @@
 import express from 'express';
 import expressWs from 'express-ws';
-import {log} from "util";
 
-const {app, getWss, applyTo} = expressWs(express());
+const {app, getWss} = expressWs(express());
 
 const router = express.Router() as expressWs.Router;
 
@@ -37,7 +36,7 @@ const db: DB[] = [
 // }
 
 
-router.ws('/connect', (ws, req, next) => {
+router.ws('/connect', (ws) => {
   let user_id = ''
   let user_room = ''
   let room_id = ''
@@ -58,7 +57,7 @@ router.ws('/connect', (ws, req, next) => {
 
         let success = false
 
-        db.forEach((room, index) => {
+        db.forEach((room) => {
           if (room.id === data.room) {
             success = true
             room.users.push({
@@ -140,6 +139,9 @@ router.ws('/connect', (ws, req, next) => {
               }else {
                 if(user.id === data.user_id){
                   user.choice = data.choice
+                  ws.send(JSON.stringify({
+                    type: 'choose',
+                  }))
                 }
               }
 
