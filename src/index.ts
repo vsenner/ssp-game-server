@@ -36,7 +36,7 @@ const db: DB[] = [
 // }
 
 
-router.ws('/connect', (ws) => {
+router.ws('/connect', (ws,req ,next) => {
   let user_id = ''
   let user_room = ''
   let room_id = ''
